@@ -20,3 +20,14 @@ def setup():
 
     message = 'Config created for IP address: {0}'.format(config['ip_address'])
     click.echo(message)
+
+
+@cli.command()
+def list():
+    """
+    List available lights
+    """
+    config = configuration.get()
+    b = bridge.connect(config['ip_address'])
+    for light in b.lights:
+        click.echo(light.name)
