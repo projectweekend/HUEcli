@@ -30,4 +30,5 @@ def list():
     config = configuration.get()
     b = bridge.connect(config['ip_address'])
     for light in b.lights:
-        click.echo(light.name)
+        message = '{0}: {1}'.format(light.name, 'ON' if light.on else 'OFF')
+        click.echo(message)
