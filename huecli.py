@@ -32,3 +32,19 @@ def list():
     for light in b.lights:
         message = '{0}: {1}'.format(light.name, 'ON' if light.on else 'OFF')
         click.echo(message)
+
+
+@cli.command()
+@click.argument('name')
+@click.argument('state')
+def light(name, state):
+    """
+    Control a light
+    """
+    config = configuration.get()
+    b = bridge.connect(config['ip_address'])
+    name = name.encode('utf-8')
+    if state == 'on':
+        b.set_light(name, 'on', True)
+    if state == 'off':
+        b.set_light(name, 'on', False)
