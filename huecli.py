@@ -2,6 +2,11 @@ import click
 from hue import bridge, configuration
 
 
+def get_bridge():
+    config = configuration.get()
+    return bridge.connect(config['ip_address'])
+
+
 @click.group()
 def cli():
     """
@@ -23,28 +28,40 @@ def setup():
 
 
 @cli.command()
-def list():
+def status():
     """
-    List available lights
+    List status of available lights
     """
-    config = configuration.get()
-    b = bridge.connect(config['ip_address'])
+    b = get_bridge()
     for light in b.lights:
         message = '{0}: {1}'.format(light.name, 'ON' if light.on else 'OFF')
         click.echo(message)
 
 
 @cli.command()
-@click.argument('name')
-@click.argument('state')
-def light(name, state):
+@click.argument('action')
+def lights(action):
     """
-    Control a light
+    Control all lights
     """
-    config = configuration.get()
-    b = bridge.connect(config['ip_address'])
-    name = name.encode('utf-8')
-    if state == 'on':
-        b.set_light(name, 'on', True)
-    if state == 'off':
-        b.set_light(name, 'on', False)
+    b = get_bridge()
+    for light in b.lights:
+        if action == 'on':
+            light.on = True
+        elif action == 'off':
+            light.on = False
+
+
+@cli.command()
+@click.argument('name_of_light')
+@click.argument('action')
+def light(name_of_light, action):
+    """
+    Control a single light
+    """
+    name_of_light = name_of_light.encode('utf-8')
+    b = get_bridge()
+    if action == 'on':
+        b.set_light(name_of_light, 'on', True)
+    if action == 'off':
+        b.set_light(name_of_light, 'on', False)

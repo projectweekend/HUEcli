@@ -13,6 +13,6 @@ setup(
     ],
     entry_points='''
         [console_scripts]
-        huecli=huecli:cli
+        hue=huecli:cli
     ''',
 )
