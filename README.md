@@ -2,6 +2,13 @@
 Control Philips HUE lighting from the command line
 
 
+### Install
+After cloning the repo:
+```
+pip install .
+```
+
+
 ### Setup connection to Bridge
 
 ```
